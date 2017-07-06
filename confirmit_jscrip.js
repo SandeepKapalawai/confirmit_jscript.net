@@ -1,3 +1,28 @@
+
+/**
+Usage: This function is used to force the number of responses in each row of a 3dgrid question. It can be called in validation field.
+eg: forceNumberOfItemsIn3dGridRows('Q23G','<=',3);
+*/
+function forceNumberOfItemsIn3dGridRows(threeDgridID,operator,numberOfResponse){
+	var qids = Get3DGridQuestionIds(threeDgridID).toString().split(','); 
+	var dv = f(qids[0]).domainValues();
+	for(var i=0;i<dv.length;i++){
+		var count = 0;
+		var thisc = dv[i];
+		for(var j=0;j<qids.length;j++){
+			var thisq = qids[j];
+			if(f(thisq).any(thisc)){
+				count++;
+			}	
+		}
+		if(operator == '<=' && count > numberOfResponse){
+			RaiseError();
+			SetQuestionErrorMessage(CurrentLang(),'Please select maximum '+numberOfResponse+' in each row.');			
+		}
+	}	
+}
+
+
 /**
 * @param string qid : Question id of single or multi select question
 * @param array codes : Array of codes to test.
